@@ -28,6 +28,7 @@ src/
   styles/site.css     the entire stylesheet
   assets/social-card.html    template used to produce public/images/seo/social-card.png
 public/               favicons, robots.txt, app icons, portrait, CNAME
+scripts/verify-dist.mjs   post-build checks on dist/
 ```
 
 `astro.config.mjs` also defines redirects from retired pages (old consulting and case-study URLs) to the home page.
@@ -37,8 +38,12 @@ public/               favicons, robots.txt, app icons, portrait, CNAME
 ```sh
 pnpm install
 pnpm dev        # local dev server
+pnpm check      # type-check .astro and .ts files
 pnpm build      # static build into dist/
+pnpm verify     # check + build + scan dist/ for broken links, fused words, third-party resources
 pnpm preview    # serve the built site
 ```
 
-There is no test suite; `pnpm build` is the check — it type-checks the i18n object and fails on missing keys.
+There is no test suite. `pnpm verify` is the check, and CI runs it on pull requests and before every deploy. `pnpm build` alone does not type-check: a missing locale key builds fine and ships an empty string. `pnpm check` catches it.
+
+Notes for coding agents live in [`AGENTS.md`](AGENTS.md).
