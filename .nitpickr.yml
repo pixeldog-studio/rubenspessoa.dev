@@ -17,5 +17,5 @@ review:
     - third-party requests (scripts, fonts, images, embeds); the site promises no tracking
     - copy changes that skip one of the en, pt-br, de locales
   ignorePaths:
-    - "**/Package.resolved"
-    - "**/pnpm-lock.yaml"
+    - '**/Package.resolved'
+    - '**/pnpm-lock.yaml'
