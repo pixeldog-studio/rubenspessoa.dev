@@ -12,11 +12,7 @@ interface Props {
 const { appName, docTitle, description, canonicalUrl, effectiveDate } = Astro.props;
 ---
 
-<BaseLayout
-  title={`${docTitle} | Pixeldog`}
-  description={description}
-  canonicalUrl={canonicalUrl}
->
+<BaseLayout title={`${docTitle} | Pixeldog`} description={description} canonicalUrl={canonicalUrl}>
   <article class="prose-page">
     <p class="kicker">{appName}</p>
     <h1>{docTitle}</h1>

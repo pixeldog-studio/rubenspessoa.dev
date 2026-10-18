@@ -1,0 +1,19 @@
+// @ts-check
+import js from '@eslint/js';
+import astro from 'eslint-plugin-astro';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+
+export default tseslint.config(
+  {
+    ignores: ['dist/', '.astro/', 'node_modules/', 'public/', '.claude/', '.qwen/'],
+  },
+  js.configs.recommended,
+  tseslint.configs.recommended,
+  astro.configs.recommended,
+  {
+    // Build-time Node scripts and config files.
+    files: ['scripts/**/*.mjs', '*.config.mjs'],
+    languageOptions: { globals: globals.node },
+  },
+);

@@ -19,36 +19,36 @@ const alternates = [
 ];
 
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ProfilePage",
-  "mainEntity": {
-    "@type": "Person",
-    "@id": "https://rubenspessoa.dev/#person",
-    "name": "Rubens Pessoa",
-    "url": "https://rubenspessoa.dev/",
-    "image": "https://rubenspessoa.dev/images/1753387860689.jpeg",
-    "jobTitle": "Founder",
-    "description": "Independent founder building apps for iPhone, iPad, and Mac.",
-    "email": "mailto:contact@rubenspessoa.dev",
-    "worksFor": {
-      "@type": "Organization",
-      "@id": "https://rubenspessoa.dev/#pixeldog",
-      "name": "Pixeldog"
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  mainEntity: {
+    '@type': 'Person',
+    '@id': 'https://rubenspessoa.dev/#person',
+    name: 'Rubens Pessoa',
+    url: 'https://rubenspessoa.dev/',
+    image: 'https://rubenspessoa.dev/images/1753387860689.jpeg',
+    jobTitle: 'Founder',
+    description: 'Independent founder building apps for iPhone, iPad, and Mac.',
+    email: 'mailto:contact@rubenspessoa.dev',
+    worksFor: {
+      '@type': 'Organization',
+      '@id': 'https://rubenspessoa.dev/#pixeldog',
+      name: 'Pixeldog',
     },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Graz",
-      "addressCountry": "AT"
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Graz',
+      addressCountry: 'AT',
     },
-    "sameAs": [
-      "https://github.com/rubenspessoa",
-      "https://www.linkedin.com/in/rubenspbf/",
-      "https://x.com/rubenspbf",
-      "https://www.threads.net/@rubenspbf",
-      "https://www.instagram.com/rubenspbf/",
-      "https://apps.apple.com/us/developer/rubens-pessoa-de-barros-filho/id1703452695?uo=4"
-    ]
-  }
+    sameAs: [
+      'https://github.com/rubenspessoa',
+      'https://www.linkedin.com/in/rubenspbf/',
+      'https://x.com/rubenspbf',
+      'https://www.threads.net/@rubenspbf',
+      'https://www.instagram.com/rubenspbf/',
+      'https://apps.apple.com/us/developer/rubens-pessoa-de-barros-filho/id1703452695?uo=4',
+    ],
+  },
 };
 ---
 
@@ -69,7 +69,7 @@ const jsonLd = {
       height="256"
       loading="eager"
       decoding="async"
-    >
+    />
 
     <p class="kicker">{t.kicker}</p>
     <h1>{t.heading}</h1>
@@ -94,7 +94,7 @@ const jsonLd = {
             height="1200"
             loading="lazy"
             decoding="async"
-          >
+          />
           <img
             class="graz__photo"
             src="/images/graz/murinsel-800.webp"
@@ -105,7 +105,7 @@ const jsonLd = {
             height="536"
             loading="lazy"
             decoding="async"
-          >
+          />
           <img
             class="graz__photo"
             src="/images/graz/hauptplatz-800.webp"
@@ -116,7 +116,7 @@ const jsonLd = {
             height="536"
             loading="lazy"
             decoding="async"
-          >
+          />
         </div>
       </section>
 
