@@ -22,18 +22,22 @@ export function tokenize(command) {
     const c = command[i];
     if (quote) {
       if (c === quote) { quote = null; continue; }
+      if (quote === '"' && c === '\\' && command[i + 1] === '\n') { i++; continue; }
       if (quote === '"' && c === '\\' && i + 1 < command.length) { cur.text += command[++i]; continue; }
       if (quote === '"' && (c === '$' || c === '`')) cur.expands = true;
       cur.text += c;
       continue;
     }
+    if (c === '\\' && command[i + 1] === '\n') { i++; continue; } // line continuation
+    // Grouping, subshells and substitutions start a new command so the git inside is still checked.
+    if (c === '(' || c === ')' || c === '{' || c === '}' || c === '`') { if (c === '`' && cur) cur.expands = true; endCmd(); continue; }
+    if (c === '#' && !cur) { while (i < command.length && command[i] !== '\n') i++; endCmd(); continue; }
     if (c === "'" || c === '"') { cur ||= { text: '', expands: false }; quote = c; continue; }
     if (c === '\\' && i + 1 < command.length) { cur ||= { text: '', expands: false }; cur.text += command[++i]; continue; }
     if (SEPARATORS.has(c)) { endCmd(); continue; }
     if (/\s/.test(c)) { pushTok(); continue; }
     cur ||= { text: '', expands: false };
-    if (c === '$' || c === '`') cur.expands = true;
-    if (c === '(' || c === ')') { pushTok(); continue; }
+    if (c === '$') cur.expands = true;
     cur.text += c;
   }
   endCmd();
@@ -103,8 +107,12 @@ function checkGhApi(args) {
     const t = args[j].text;
     if (t === '-X' || t === '--method') { method = (args[j + 1]?.text || '').toUpperCase(); j++; continue; }
     if (/^--method=/.test(t)) { method = t.split('=')[1].toUpperCase(); continue; }
+    if (/^-X[A-Za-z]+$/.test(t)) { method = t.slice(2).toUpperCase(); continue; }
     if (['-f', '-F', '--field', '--raw-field', '--input'].includes(t)) { hasFields = true; j++; continue; }
     if (!t.startsWith('-') && !path) path = t;
+  }
+  if (path === 'graphql' && /mergePullRequest|mergeBranch|updateRefs?\b|createRef|deleteRef|enablePullRequestAutoMerge/.test(args.map((a) => a.text).join(' '))) {
+    return 'gh api graphql mutations that merge or move refs are not allowed; use gh pr merge <n> into develop';
   }
   const effective = method || (hasFields ? 'POST' : 'GET');
   if (effective === 'GET') return null;
@@ -118,7 +126,7 @@ function checkGhApi(args) {
 export function checkMerge(command, lookupBase) {
   for (const args of tokenize(command)) {
     const words = args.map((a) => a.text);
-    const g = words.indexOf('gh');
+    const g = words.findIndex((w) => w.split('/').pop() === 'gh');
     if (g < 0) continue;
     if (words[g + 1] === 'api') {
       const v = checkGhApi(args.slice(g + 2));
@@ -149,8 +157,9 @@ export function findViolation(command, currentBranch = () => null) {
     if (['sh', 'bash', 'zsh', 'eval', 'xargs', 'env'].includes(head) && /\bgit\b[\s\S]*\bpush\b|\bgh\s+(pr\s+merge|api)\b/.test(words.map((w) => w.text).join(' '))) {
       return 'git push / gh merge inside sh -c, eval, xargs or env cannot be checked';
     }
-    const gi = words.findIndex((w) => w.text === 'git');
-    if (gi >= 0 && (gi === 0 || ['sudo', 'command', 'time', 'nice'].includes(words[0].text))) {
+    // Any token whose basename is git starts a git invocation (wrappers: xcrun, timeout, nohup, exec, /usr/bin/git, if/while…).
+    for (let gi = 0; gi < words.length; gi++) {
+      if (words[gi].text.split('/').pop() !== 'git') continue;
       const v = checkGit(words.slice(gi + 1), currentBranch);
       if (v) return v;
     }
