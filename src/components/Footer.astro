@@ -324,7 +324,9 @@ const home = prefix ? `${prefix}/` : '/';
           try {
             if (v === 'auto') localStorage.removeItem('theme');
             else localStorage.setItem('theme', v);
-          } catch {}
+          } catch {
+            // Storage can be unavailable; the theme still applies for this page view.
+          }
           apply(v);
         }),
       );

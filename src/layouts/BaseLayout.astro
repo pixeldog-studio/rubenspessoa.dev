@@ -78,7 +78,9 @@ const resolvedOgDescription = ogDescription ?? description;
       try {
         const t = localStorage.getItem('theme');
         if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
-      } catch {}
+      } catch {
+        // Storage can be unavailable (private mode, blocked cookies); keep the default theme.
+      }
     </script>
     <title>{title}</title>
     {jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
