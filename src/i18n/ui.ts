@@ -44,7 +44,8 @@ export const ui = {
       title: 'Pixeldog | Apps for iPhone, iPad, and Mac by Rubens Pessoa',
       description:
         'Pixeldog is the app studio of Rubens Pessoa. Native apps for iPhone, iPad, and Mac: Save My Cactus, Hustlrr, and Giorni.',
-      ogDescription: 'Native apps for Apple devices from Pixeldog, the one-person studio of Rubens Pessoa.',
+      ogDescription:
+        'Native apps for Apple devices from Pixeldog, the one-person studio of Rubens Pessoa.',
       heroTitle: 'Native apps for humans.',
       heroLede:
         'Pixeldog is the one-person app studio of Rubens Pessoa in Graz, Austria. Apps for iPhone, iPad, Mac, and Apple Watch, and the person who built them also answers the support email.',
@@ -55,7 +56,8 @@ export const ui = {
         tagline: 'AI plant care',
         summary:
           'Stop killing your plants. Point your camera at a struggling plant and the app tells you what it is and what’s wrong, then builds a watering schedule you’ll actually follow.',
-        jsonDescription: 'AI plant care: find out what your plant needs and keep a watering schedule.',
+        jsonDescription:
+          'AI plant care: find out what your plant needs and keep a watering schedule.',
       },
       hustlrr: {
         tagline: 'AI chat for Apple devices',
@@ -72,7 +74,8 @@ export const ui = {
         storeAria: 'Download Giorni on the App Store',
       },
       provenanceFlagAlt: 'European Union',
-      provenance: 'Made in Europe. Built under European privacy law, with no trackers and no data resale.',
+      provenance:
+        'Made in Europe. Built under European privacy law, with no trackers and no data resale.',
     },
     about: {
       title: 'About | Pixeldog',
@@ -92,7 +95,8 @@ export const ui = {
       grazAlts: {
         uhrturm: 'The Uhrturm clock tower on the Schlossberg, seen from the square below',
         murinsel: 'The Murinsel floating platform on the Mur river at dusk',
-        hauptplatz: 'The Hauptplatz in Graz on a wet evening, with the lit kiosk in the middle of the square',
+        hauptplatz:
+          'The Hauptplatz in Graz on a wet evening, with the lit kiosk in the middle of the square',
       },
       contactPrefix: 'Questions about the apps, or just want to say hi? Write me at',
       portraitAlt: 'Portrait of Rubens Pessoa',
@@ -113,7 +117,8 @@ export const ui = {
       title: 'Pixeldog | Apps para iPhone, iPad e Mac por Rubens Pessoa',
       description:
         'A Pixeldog é o estúdio de apps de Rubens Pessoa. Apps nativos para iPhone, iPad e Mac: Save My Cactus, Hustlrr e Giorni.',
-      ogDescription: 'Apps nativos para dispositivos Apple da Pixeldog, o estúdio de uma pessoa só de Rubens Pessoa.',
+      ogDescription:
+        'Apps nativos para dispositivos Apple da Pixeldog, o estúdio de uma pessoa só de Rubens Pessoa.',
       heroTitle: 'Apps nativos para gente de verdade.',
       heroLede:
         'A Pixeldog é o estúdio de apps de uma pessoa só: o de Rubens Pessoa, em Graz, na Áustria. Apps para iPhone, iPad, Mac e Apple Watch, e quem escreveu o código é quem responde o e-mail de suporte.',
@@ -124,7 +129,8 @@ export const ui = {
         tagline: 'Cuidado de plantas com IA',
         summary:
           'Pare de matar suas plantas. Aponte a câmera para uma planta sofrendo e o app diz o que ela é e o que há de errado, e ainda monta um cronograma de rega que você vai conseguir seguir.',
-        jsonDescription: 'Cuidado de plantas com IA: descubra o que sua planta precisa e mantenha um cronograma de rega.',
+        jsonDescription:
+          'Cuidado de plantas com IA: descubra o que sua planta precisa e mantenha um cronograma de rega.',
       },
       hustlrr: {
         tagline: 'Chat de IA para dispositivos Apple',
@@ -137,11 +143,13 @@ export const ui = {
         tagline: 'Hábitos diários',
         summary:
           'Um app de hábitos que não fica no seu pé. Marque seus dias, use uma sessão de foco quando precisar e retome a sequência depois de uma semana ruim.',
-        jsonDescription: 'Um rastreador de hábitos diários com sessões de foco e sincronização via iCloud.',
+        jsonDescription:
+          'Um rastreador de hábitos diários com sessões de foco e sincronização via iCloud.',
         storeAria: 'Baixar o Giorni na App Store',
       },
       provenanceFlagAlt: 'União Europeia',
-      provenance: 'Feito na Europa. Criado sob as leis europeias de privacidade, sem rastreadores e sem venda de dados.',
+      provenance:
+        'Feito na Europa. Criado sob as leis europeias de privacidade, sem rastreadores e sem venda de dados.',
     },
     about: {
       title: 'Sobre | Pixeldog',
@@ -161,7 +169,8 @@ export const ui = {
       grazAlts: {
         uhrturm: 'A torre do relógio Uhrturm no Schlossberg, vista da praça abaixo',
         murinsel: 'A plataforma flutuante Murinsel no rio Mur ao anoitecer',
-        hauptplatz: 'A Hauptplatz de Graz numa noite chuvosa, com o quiosque iluminado no meio da praça',
+        hauptplatz:
+          'A Hauptplatz de Graz numa noite chuvosa, com o quiosque iluminado no meio da praça',
       },
       contactPrefix: 'Dúvidas sobre os apps, ou só quer dizer um oi? Me escreva em',
       portraitAlt: 'Retrato de Rubens Pessoa',
@@ -182,7 +191,8 @@ export const ui = {
       title: 'Pixeldog | Apps für iPhone, iPad und Mac von Rubens Pessoa',
       description:
         'Pixeldog ist das App-Studio von Rubens Pessoa. Native Apps für iPhone, iPad und Mac: Save My Cactus, Hustlrr und Giorni.',
-      ogDescription: 'Native Apps für Apple-Geräte von Pixeldog, dem Ein-Personen-Studio von Rubens Pessoa.',
+      ogDescription:
+        'Native Apps für Apple-Geräte von Pixeldog, dem Ein-Personen-Studio von Rubens Pessoa.',
       heroTitle: 'Native Apps für Menschen.',
       heroLede:
         'Pixeldog ist das Ein-Personen-App-Studio von Rubens Pessoa in Graz. Apps für iPhone, iPad, Mac und Apple Watch, und wer sie gebaut hat, beantwortet auch die Support-Mails.',
@@ -193,7 +203,8 @@ export const ui = {
         tagline: 'Pflanzenpflege mit KI',
         summary:
           'Schluss mit toten Pflanzen. Richte die Kamera auf eine kränkelnde Pflanze und die App sagt dir, was es für eine ist und was ihr fehlt. Dazu gibt es einen Gießplan, den du auch wirklich einhältst.',
-        jsonDescription: 'Pflanzenpflege mit KI: finde heraus, was deine Pflanze braucht, und halte einen Gießplan ein.',
+        jsonDescription:
+          'Pflanzenpflege mit KI: finde heraus, was deine Pflanze braucht, und halte einen Gießplan ein.',
       },
       hustlrr: {
         tagline: 'KI-Chat für Apple-Geräte',
@@ -210,7 +221,8 @@ export const ui = {
         storeAria: 'Giorni im App Store laden',
       },
       provenanceFlagAlt: 'Europäische Union',
-      provenance: 'Made in Europe. Gebaut unter europäischem Datenschutzrecht, ohne Tracker und ohne Datenverkauf.',
+      provenance:
+        'Made in Europe. Gebaut unter europäischem Datenschutzrecht, ohne Tracker und ohne Datenverkauf.',
     },
     about: {
       title: 'Über mich | Pixeldog',
@@ -226,11 +238,13 @@ export const ui = {
         'Graz ist seit sieben Jahren mein Zuhause. Ich fahre praktisch überallhin mit dem Rad, weil das hier einfach geht. Sonntage sind hier wirklich still: Geschäfte zu, Straßen langsam, und ich habe diesen Rhythmus lieben gelernt. Für eine Stadt dieser Größe gibt es erstaunlich viel Kultur, von der Oper bis zu Straßenfestivals, und das färbt ab. Ich glaube, man sieht das den Apps an. Ruhige Software ohne Eile, entstanden ein paar Gehminuten von den Orten auf diesen Fotos.',
       grazText2:
         'Und ich bin nicht von hier. Ich kam aus Brasilien, habe mir diesen Ort ausgesucht, und er liegt mir so am Herzen, wie einem Dinge am Herzen liegen, die man selbst gewählt hat. Pixeldog ist mein kleiner Beitrag an die Stadt und den Kontinent, die mein Zuhause geworden sind.',
-      closing: 'Wenn eine dieser Apps auf deinem Handy landet, weißt du jetzt, wer sie gemacht hat und wo.',
+      closing:
+        'Wenn eine dieser Apps auf deinem Handy landet, weißt du jetzt, wer sie gemacht hat und wo.',
       grazAlts: {
         uhrturm: 'Der Uhrturm am Schlossberg, vom Platz darunter gesehen',
         murinsel: 'Die Murinsel in der Mur in der Abenddämmerung',
-        hauptplatz: 'Der Grazer Hauptplatz an einem regnerischen Abend, mit dem beleuchteten Würstelstand',
+        hauptplatz:
+          'Der Grazer Hauptplatz an einem regnerischen Abend, mit dem beleuchteten Würstelstand',
       },
       contactPrefix: 'Fragen zu den Apps, oder einfach Hallo sagen? Schreib mir an',
       portraitAlt: 'Porträt von Rubens Pessoa',

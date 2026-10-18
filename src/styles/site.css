@@ -39,11 +39,11 @@
   --measure: 42rem;
   --wide: 52rem;
   --font:
-    -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
   --font-display:
-    -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto,
-    "Helvetica Neue", Arial, sans-serif;
+    -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
 }
 
 /*
@@ -55,18 +55,15 @@
 @media (color-gamut: p3) {
   :root {
     --brand-verdigris: color(display-p3 0.197 0.746 0.756);
-    --accent: light-dark(
-      color(display-p3 0.808 0.092 0.351),
-      color(display-p3 0.975 0.339 0.566)
-    );
+    --accent: light-dark(color(display-p3 0.808 0.092 0.351), color(display-p3 0.975 0.339 0.566));
   }
 }
 
-:root[data-theme="light"] {
+:root[data-theme='light'] {
   color-scheme: light;
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   color-scheme: dark;
 }
 
@@ -74,22 +71,20 @@
    need explicit dark rules (the accent glow needs more presence on
    near-black, and the raster logo needs an outline to survive it) */
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root:not([data-theme='light']) {
     --grain-opacity: 0.16;
     --wash-accent-mix: 13%;
     --mark-halo: rgba(236, 236, 234, 0.55);
-    --mark-filter:
-      drop-shadow(1px 0 0 var(--mark-halo)) drop-shadow(-1px 0 0 var(--mark-halo))
+    --mark-filter: drop-shadow(1px 0 0 var(--mark-halo)) drop-shadow(-1px 0 0 var(--mark-halo))
       drop-shadow(0 1px 0 var(--mark-halo)) drop-shadow(0 -1px 0 var(--mark-halo));
   }
 }
 
-:root[data-theme="dark"] {
+:root[data-theme='dark'] {
   --grain-opacity: 0.16;
   --wash-accent-mix: 13%;
   --mark-halo: rgba(236, 236, 234, 0.55);
-  --mark-filter:
-    drop-shadow(1px 0 0 var(--mark-halo)) drop-shadow(-1px 0 0 var(--mark-halo))
+  --mark-filter: drop-shadow(1px 0 0 var(--mark-halo)) drop-shadow(-1px 0 0 var(--mark-halo))
     drop-shadow(0 1px 0 var(--mark-halo)) drop-shadow(0 -1px 0 var(--mark-halo));
 }
 
@@ -115,16 +110,17 @@ body {
   /* Color and image are separate declarations on purpose: if a browser cannot
      parse the gradient, only the wash is lost, not the page background. */
   background-color: var(--bg);
-  background-image:
-    radial-gradient(70rem 48rem at 12% -8%,
-      color-mix(in oklab, var(--brand-verdigris) var(--wash-accent-mix), transparent),
-      transparent 62%);
+  background-image: radial-gradient(
+    70rem 48rem at 12% -8%,
+    color-mix(in oklab, var(--brand-verdigris) var(--wash-accent-mix), transparent),
+    transparent 62%
+  );
   -webkit-font-smoothing: antialiased;
 }
 
 /* Paper-grain texture: static SVG noise, ~500 bytes, no requests */
 body::before {
-  content: "";
+  content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
@@ -267,7 +263,7 @@ main {
 }
 
 .site-nav a:hover,
-.site-nav a[aria-current="page"] {
+.site-nav a[aria-current='page'] {
   color: var(--ink);
 }
 
@@ -312,7 +308,7 @@ main {
 /* A single square pixel marking each label, in the label's own color */
 .section > h2::before,
 .kicker::before {
-  content: "";
+  content: '';
   display: inline-block;
   width: 0.4em;
   height: 0.4em;
@@ -699,7 +695,7 @@ main {
   background: var(--line-soft);
 }
 
-.lang-menu__list a[aria-current="true"] {
+.lang-menu__list a[aria-current='true'] {
   color: var(--ink);
   font-weight: 550;
 }
@@ -731,7 +727,7 @@ main {
   color: var(--ink);
 }
 
-.theme-group button[aria-checked="true"] {
+.theme-group button[aria-checked='true'] {
   color: var(--ink);
   background: var(--line-soft);
 }
