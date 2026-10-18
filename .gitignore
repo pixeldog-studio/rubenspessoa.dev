@@ -7,3 +7,11 @@ dist/
 .claude/worktrees/
 .claude/settings.local.json
 .qwen/
+
+# Secrets (never commit)
+.env*
+*.pem
+*.p8
+
+# hq quality-gate receipts and stop-verify state
+.hq/

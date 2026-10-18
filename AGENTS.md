@@ -2,6 +2,8 @@
 
 Guide for coding agents working on rubenspessoa.dev, the static Astro site for Pixeldog, the one-person app studio of Rubens Pessoa in Graz. Read `README.md` for the human overview; this file holds what an agent needs to change things safely.
 
+Shared workflow: `~/Developer/hq/WORKFLOW.md`
+
 ## Commands
 
 ```sh
@@ -9,11 +11,13 @@ pnpm install --frozen-lockfile
 pnpm dev        # dev server on http://localhost:4321
 pnpm check      # astro check: TypeScript across .astro and .ts files
 pnpm build      # static build into dist/ (does NOT type-check)
-pnpm verify     # check + build + scripts/verify-dist.mjs. Run before calling work done.
+pnpm verify     # check + build + scripts/verify-dist.mjs
 pnpm preview    # serve dist/
 ```
 
 `pnpm verify` is the definition of done. CI runs it on every PR (`.github/workflows/ci.yml`), and the deploy workflow runs it before publishing `master` to GitHub Pages, so a failing verify never ships.
+
+Fast check (Stop hook, `HQ_FAST_VERIFY`): `pnpm check` (a few seconds). Guard hooks run from `~/Developer/hq/hooks/`, including the PostToolUse `lint-on-edit.mjs`, which syntax-checks edited `.js`/`.mjs`/`.json` files; the repo has no formatter.
 
 Node 22+ (CI uses 22), pnpm version pinned via `packageManager`. TypeScript is held at 6.x because `@astrojs/check` doesn't support 7 yet.
 
@@ -67,4 +71,13 @@ No SVG rasteriser (rsvg, ImageMagick) is installed. To regenerate:
 
 ## Git
 
-The owner usually commits straight to `master`, and every push deploys. Don't commit or push unless asked. Use `gh` for remote state, since local clones can lag `origin`.
+Every push to `master` deploys to GitHub Pages. Agents work in a worktree on a `feature/` branch cut from `develop` and open a PR into `develop`; they may merge into `develop` after the quality gate and the Nitpickr review. Never push to `develop` or `master` directly; releasing `develop` to `master` is human-only. Use `gh` for remote state, since local clones can lag `origin`.
+
+## Observability
+
+- Errors go to: none by design. The site has no analytics, error tracking or runtime logging, and `verify-dist.mjs` rejects third-party scripts. Build and deploy logs live in GitHub Actions.
+- Read them with: `gh run list -R rubenspessoa/rubenspessoa.dev` and `gh run view <id> --log-failed`.
+
+## Linear
+
+- Project: none yet (team FRO). Strict gitflow: `feature/fro-123-slug` (or `bugfix/`) from `develop`; PR title `FRO-123: summary`; PR into `develop`; releases to `master` are human-only. Without a ticket use `feature/<slug>` and `chore: summary`.

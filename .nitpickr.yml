@@ -1,0 +1,21 @@
+# Canonical Nitpickr config; repos add their own focusAreas/ignorePaths.
+version: 1
+triggers:
+  autoReview:
+    enabled: true
+    # Drafts are reviewed once marked ready, then on every push.
+    events:
+      - pull_request.ready_for_review
+      - pull_request.synchronize
+review:
+  strictness: balanced
+  maxComments: 20
+  focusAreas:
+    - correctness
+    - security
+    - tests or fixtures weakened to make checks pass
+    - third-party requests (scripts, fonts, images, embeds); the site promises no tracking
+    - copy changes that skip one of the en, pt-br, de locales
+  ignorePaths:
+    - '**/Package.resolved'
+    - '**/pnpm-lock.yaml'

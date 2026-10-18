@@ -34,7 +34,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Type-check, build, and verify dist
-        run: pnpm run verify
+        run: pnpm verify
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
