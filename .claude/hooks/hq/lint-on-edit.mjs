@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-// PostToolUse(Edit|Write|MultiEdit): syntax-check the edited file. The repo has no formatter,
-// so this lints instead: `node --check` for .js/.mjs/.cjs, JSON.parse for .json.
-// Astro/TS files are covered by the Stop hook (HQ_FAST_VERIFY = pnpm check).
+// PostToolUse(Edit|Write|MultiEdit): syntax-check the edited file for repos without a formatter:
+// `node --check` for .js/.mjs/.cjs, JSON.parse for .json. Other files are covered by stop-verify.
 import { spawnSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { extname, resolve } from 'node:path';

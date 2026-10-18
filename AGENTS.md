@@ -17,7 +17,7 @@ pnpm preview    # serve dist/
 
 `pnpm verify` is the definition of done. CI runs it on every PR (`.github/workflows/ci.yml`), and the deploy workflow runs it before publishing `master` to GitHub Pages, so a failing verify never ships.
 
-Fast check (Stop hook, `HQ_FAST_VERIFY`): `pnpm check` (a few seconds). The PostToolUse hook `.claude/hooks/lint-on-edit.mjs` syntax-checks edited `.js`/`.mjs`/`.json` files; the repo has no formatter.
+Fast check (Stop hook, `HQ_FAST_VERIFY`): `pnpm check` (a few seconds). The PostToolUse hook `.claude/hooks/hq/lint-on-edit.mjs` (shared hq hook, keep byte-identical) syntax-checks edited `.js`/`.mjs`/`.json` files; the repo has no formatter.
 
 Node 22+ (CI uses 22), pnpm version pinned via `packageManager`. TypeScript is held at 6.x because `@astrojs/check` doesn't support 7 yet.
 
@@ -71,7 +71,7 @@ No SVG rasteriser (rsvg, ImageMagick) is installed. To regenerate:
 
 ## Git
 
-Every push to `master` deploys to GitHub Pages. Agents work in a worktree and open a draft PR against `master`; never push to `master` directly. Use `gh` for remote state, since local clones can lag `origin`.
+Every push to `master` deploys to GitHub Pages. Agents work in a worktree on a `feature/` branch cut from `develop` and open a PR into `develop`; they may merge into `develop` after the quality gate and the Nitpickr review. Never push to `develop` or `master` directly; releasing `develop` to `master` is human-only. Use `gh` for remote state, since local clones can lag `origin`.
 
 ## Observability
 
@@ -80,4 +80,4 @@ Every push to `master` deploys to GitHub Pages. Agents work in a worktree and op
 
 ## Linear
 
-- Project: none yet (team FRO). Branch `FRO-123-slug`, PR title `FRO-123: summary`, base `master`. Without a ticket use `chore/<slug>` and `chore: summary`.
+- Project: none yet (team FRO). Strict gitflow: `feature/fro-123-slug` (or `bugfix/`) from `develop`; PR title `FRO-123: summary`; PR into `develop`; releases to `master` are human-only. Without a ticket use `feature/<slug>` and `chore: summary`.
