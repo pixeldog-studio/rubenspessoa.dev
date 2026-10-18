@@ -17,7 +17,7 @@ pnpm preview    # serve dist/
 
 `pnpm verify` is the definition of done. CI runs it on every PR (`.github/workflows/ci.yml`), and the deploy workflow runs it before publishing `master` to GitHub Pages, so a failing verify never ships.
 
-Fast check (Stop hook, `HQ_FAST_VERIFY`): `pnpm check` (a few seconds). The PostToolUse hook `.claude/hooks/hq/lint-on-edit.mjs` (shared hq hook, keep byte-identical) syntax-checks edited `.js`/`.mjs`/`.json` files; the repo has no formatter.
+Fast check (Stop hook, `HQ_FAST_VERIFY`): `pnpm check` (a few seconds). Guard hooks run from `~/Developer/hq/hooks/`, including the PostToolUse `lint-on-edit.mjs`, which syntax-checks edited `.js`/`.mjs`/`.json` files; the repo has no formatter.
 
 Node 22+ (CI uses 22), pnpm version pinned via `packageManager`. TypeScript is held at 6.x because `@astrojs/check` doesn't support 7 yet.
 
