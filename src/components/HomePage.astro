@@ -19,99 +19,99 @@ const alternates = [
 ];
 
 const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
+  '@context': 'https://schema.org',
+  '@graph': [
     {
-      "@type": "Person",
-      "@id": "https://rubenspessoa.dev/#person",
-      "name": "Rubens Pessoa",
-      "url": "https://rubenspessoa.dev/",
-      "image": "https://rubenspessoa.dev/images/1753387860689.jpeg",
-      "jobTitle": "Founder",
-      "description": "Independent founder building apps for iPhone, iPad, and Mac.",
-      "email": "mailto:contact@rubenspessoa.dev",
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": canonicalUrl
+      '@type': 'Person',
+      '@id': 'https://rubenspessoa.dev/#person',
+      name: 'Rubens Pessoa',
+      url: 'https://rubenspessoa.dev/',
+      image: 'https://rubenspessoa.dev/images/1753387860689.jpeg',
+      jobTitle: 'Founder',
+      description: 'Independent founder building apps for iPhone, iPad, and Mac.',
+      email: 'mailto:contact@rubenspessoa.dev',
+      mainEntityOfPage: {
+        '@type': 'WebPage',
+        '@id': canonicalUrl,
       },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Graz",
-        "addressCountry": "AT"
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Graz',
+        addressCountry: 'AT',
       },
-      "sameAs": [
-        "https://github.com/rubenspessoa",
-        "https://www.linkedin.com/in/rubenspbf/",
-        "https://x.com/rubenspbf",
-        "https://www.threads.net/@rubenspbf",
-        "https://www.instagram.com/rubenspbf/",
-        "https://apps.apple.com/us/developer/rubens-pessoa-de-barros-filho/id1703452695?uo=4",
-        "https://www.hustlrr.ai/",
-        "https://savemycactus.rubenspessoa.dev/",
-        "https://nitpickr.rubenspessoa.dev/"
-      ]
+      sameAs: [
+        'https://github.com/rubenspessoa',
+        'https://www.linkedin.com/in/rubenspbf/',
+        'https://x.com/rubenspbf',
+        'https://www.threads.net/@rubenspbf',
+        'https://www.instagram.com/rubenspbf/',
+        'https://apps.apple.com/us/developer/rubens-pessoa-de-barros-filho/id1703452695?uo=4',
+        'https://www.hustlrr.ai/',
+        'https://savemycactus.rubenspessoa.dev/',
+        'https://nitpickr.rubenspessoa.dev/',
+      ],
     },
     {
-      "@type": "Organization",
-      "@id": "https://rubenspessoa.dev/#pixeldog",
-      "name": "Pixeldog",
-      "description": "One-person app studio of Rubens Pessoa.",
-      "url": "https://rubenspessoa.dev/",
-      "logo": "https://rubenspessoa.dev/images/brand/pixeldog-icon.png",
-      "founder": { "@id": "https://rubenspessoa.dev/#person" },
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Graz",
-        "addressCountry": "AT"
-      }
+      '@type': 'Organization',
+      '@id': 'https://rubenspessoa.dev/#pixeldog',
+      name: 'Pixeldog',
+      description: 'One-person app studio of Rubens Pessoa.',
+      url: 'https://rubenspessoa.dev/',
+      logo: 'https://rubenspessoa.dev/images/brand/pixeldog-icon.png',
+      founder: { '@id': 'https://rubenspessoa.dev/#person' },
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Graz',
+        addressCountry: 'AT',
+      },
     },
     {
-      "@type": "WebSite",
-      "@id": "https://rubenspessoa.dev/#website",
-      "url": "https://rubenspessoa.dev/",
-      "name": "Pixeldog",
-      "inLanguage": localeLangTags[locale],
-      "description": t.ogDescription,
-      "publisher": {
-        "@id": "https://rubenspessoa.dev/#pixeldog"
-      }
+      '@type': 'WebSite',
+      '@id': 'https://rubenspessoa.dev/#website',
+      url: 'https://rubenspessoa.dev/',
+      name: 'Pixeldog',
+      inLanguage: localeLangTags[locale],
+      description: t.ogDescription,
+      publisher: {
+        '@id': 'https://rubenspessoa.dev/#pixeldog',
+      },
     },
     {
-      "@type": "SoftwareApplication",
-      "name": "Save My Cactus",
-      "operatingSystem": "iOS",
-      "applicationCategory": "LifestyleApplication",
-      "description": t.smc.jsonDescription,
-      "url": "https://savemycactus.rubenspessoa.dev/",
-      "image": "https://rubenspessoa.dev/images/apps/save-my-cactus-icon.png",
-      "author": { "@id": "https://rubenspessoa.dev/#person" },
-      "publisher": { "@id": "https://rubenspessoa.dev/#pixeldog" }
+      '@type': 'SoftwareApplication',
+      name: 'Save My Cactus',
+      operatingSystem: 'iOS',
+      applicationCategory: 'LifestyleApplication',
+      description: t.smc.jsonDescription,
+      url: 'https://savemycactus.rubenspessoa.dev/',
+      image: 'https://rubenspessoa.dev/images/apps/save-my-cactus-icon.png',
+      author: { '@id': 'https://rubenspessoa.dev/#person' },
+      publisher: { '@id': 'https://rubenspessoa.dev/#pixeldog' },
     },
     {
-      "@type": "SoftwareApplication",
-      "name": "Hustlrr",
-      "operatingSystem": "iOS, iPadOS, macOS",
-      "applicationCategory": "ProductivityApplication",
-      "description": t.hustlrr.jsonDescription,
-      "url": "https://apps.apple.com/us/app/hustlrr-question-ai-chat/id6737912223",
-      "image": "https://rubenspessoa.dev/images/apps/hustlrr-icon.jpg",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "author": { "@id": "https://rubenspessoa.dev/#person" },
-      "publisher": { "@id": "https://rubenspessoa.dev/#pixeldog" }
+      '@type': 'SoftwareApplication',
+      name: 'Hustlrr',
+      operatingSystem: 'iOS, iPadOS, macOS',
+      applicationCategory: 'ProductivityApplication',
+      description: t.hustlrr.jsonDescription,
+      url: 'https://apps.apple.com/us/app/hustlrr-question-ai-chat/id6737912223',
+      image: 'https://rubenspessoa.dev/images/apps/hustlrr-icon.jpg',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      author: { '@id': 'https://rubenspessoa.dev/#person' },
+      publisher: { '@id': 'https://rubenspessoa.dev/#pixeldog' },
     },
     {
-      "@type": "SoftwareApplication",
-      "name": "Giorni",
-      "operatingSystem": "iOS",
-      "applicationCategory": "ProductivityApplication",
-      "description": t.giorni.jsonDescription,
-      "url": "https://apps.apple.com/us/app/daily-habit-tracker-giorni/id6505112435",
-      "image": "https://rubenspessoa.dev/images/apps/giorni-icon.jpg",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-      "author": { "@id": "https://rubenspessoa.dev/#person" },
-      "publisher": { "@id": "https://rubenspessoa.dev/#pixeldog" }
-    }
-  ]
+      '@type': 'SoftwareApplication',
+      name: 'Giorni',
+      operatingSystem: 'iOS',
+      applicationCategory: 'ProductivityApplication',
+      description: t.giorni.jsonDescription,
+      url: 'https://apps.apple.com/us/app/daily-habit-tracker-giorni/id6505112435',
+      image: 'https://rubenspessoa.dev/images/apps/giorni-icon.jpg',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      author: { '@id': 'https://rubenspessoa.dev/#person' },
+      publisher: { '@id': 'https://rubenspessoa.dev/#pixeldog' },
+    },
+  ],
 };
 ---
 
@@ -144,7 +144,7 @@ const jsonLd = {
             height="128"
             loading="eager"
             decoding="async"
-          >
+          />
           <div class="app__title">
             <h3>Save My Cactus</h3>
             <p class="app__tagline">{t.smc.tagline}</p>
@@ -179,7 +179,7 @@ const jsonLd = {
             height="128"
             loading="lazy"
             decoding="async"
-          >
+          />
           <div class="app__title">
             <h3>Hustlrr</h3>
             <p class="app__tagline">{t.hustlrr.tagline}</p>
@@ -203,7 +203,7 @@ const jsonLd = {
               height="40"
               loading="lazy"
               decoding="async"
-            >
+            />
           </a>
           <a
             class="text-link"
@@ -229,7 +229,7 @@ const jsonLd = {
             height="128"
             loading="lazy"
             decoding="async"
-          >
+          />
           <div class="app__title">
             <h3>Giorni</h3>
             <p class="app__tagline">{t.giorni.tagline}</p>
@@ -253,7 +253,7 @@ const jsonLd = {
               height="40"
               loading="lazy"
               decoding="async"
-            >
+            />
           </a>
         </div>
       </article>
@@ -261,6 +261,11 @@ const jsonLd = {
   </section>
 
   <section class="section">
-    <p class="provenance"><span class="provenance__flag" role="img" aria-label={t.provenanceFlagAlt}>🇪🇺</span>{t.provenance}</p>
+    <p class="provenance">
+      <span class="provenance__flag" role="img" aria-label={t.provenanceFlagAlt}>
+        🇪🇺
+      </span>
+      {t.provenance}
+    </p>
   </section>
 </BaseLayout>

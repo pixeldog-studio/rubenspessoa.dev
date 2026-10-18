@@ -54,7 +54,9 @@ for (const file of htmlFiles) {
 
   // 3. Zero third-party requests by design: no external scripts, styles, frames,
   //    images or fonts. Plain outbound <a href> links are fine.
-  for (const m of html.matchAll(/<(script|link|iframe|img|source|video|audio|embed|object)\b[^>]*\b(?:src|href|srcset)="([^"]+)"/g)) {
+  for (const m of html.matchAll(
+    /<(script|link|iframe|img|source|video|audio|embed|object)\b[^>]*\b(?:src|href|srcset)="([^"]+)"/g,
+  )) {
     const [, tag, url] = m;
     if (tag === 'link' && /rel="(canonical|alternate)"/.test(m[0])) continue;
     if (isExternal(url)) report(file, `third-party resource in <${tag}>: ${url}`);
@@ -62,7 +64,9 @@ for (const file of htmlFiles) {
 
   // 4. Internal links and assets must resolve to a file in dist/. Meta `content`
   //    covers og:image / og:url; only absolute site URLs count there.
-  for (const m of html.matchAll(/\b(?:href|src)="([^"]+)"|\bcontent="(https:\/\/rubenspessoa\.dev[^"]*)"/g)) {
+  for (const m of html.matchAll(
+    /\b(?:href|src)="([^"]+)"|\bcontent="(https:\/\/rubenspessoa\.dev[^"]*)"/g,
+  )) {
     const url = m[1] ?? m[2];
     const target = toLocalPath(url);
     if (target && !resolves(target)) report(file, `broken internal link: ${url}`);

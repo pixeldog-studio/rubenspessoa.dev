@@ -21,6 +21,8 @@ const aboutPath = `${prefix}/about/`;
 
   <nav class="site-nav" aria-label="Primary">
     <a href={`${home}#apps`}>{t.nav.apps}</a>
-    <a href={aboutPath} aria-current={currentPath.startsWith(aboutPath) ? 'page' : undefined}>{t.nav.about}</a>
+    <a href={aboutPath} aria-current={currentPath.startsWith(aboutPath) ? 'page' : undefined}>
+      {t.nav.about}
+    </a>
   </nav>
 </header>
