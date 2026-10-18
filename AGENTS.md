@@ -2,6 +2,8 @@
 
 Guide for coding agents working on rubenspessoa.dev, the static Astro site for Pixeldog, the one-person app studio of Rubens Pessoa in Graz. Read `README.md` for the human overview; this file holds what an agent needs to change things safely.
 
+Shared workflow: `~/Developer/hq/WORKFLOW.md`
+
 ## Commands
 
 ```sh
@@ -9,11 +11,13 @@ pnpm install --frozen-lockfile
 pnpm dev        # dev server on http://localhost:4321
 pnpm check      # astro check: TypeScript across .astro and .ts files
 pnpm build      # static build into dist/ (does NOT type-check)
-pnpm verify     # check + build + scripts/verify-dist.mjs. Run before calling work done.
+pnpm verify     # check + build + scripts/verify-dist.mjs
 pnpm preview    # serve dist/
 ```
 
 `pnpm verify` is the definition of done. CI runs it on every PR (`.github/workflows/ci.yml`), and the deploy workflow runs it before publishing `master` to GitHub Pages, so a failing verify never ships.
+
+Fast check (Stop hook, `HQ_FAST_VERIFY`): `pnpm check` (a few seconds). The PostToolUse hook `.claude/hooks/lint-on-edit.mjs` syntax-checks edited `.js`/`.mjs`/`.json` files; the repo has no formatter.
 
 Node 22+ (CI uses 22), pnpm version pinned via `packageManager`. TypeScript is held at 6.x because `@astrojs/check` doesn't support 7 yet.
 
@@ -67,4 +71,13 @@ No SVG rasteriser (rsvg, ImageMagick) is installed. To regenerate:
 
 ## Git
 
-The owner usually commits straight to `master`, and every push deploys. Don't commit or push unless asked. Use `gh` for remote state, since local clones can lag `origin`.
+Every push to `master` deploys to GitHub Pages. Agents work in a worktree and open a draft PR against `master`; never push to `master` directly. Use `gh` for remote state, since local clones can lag `origin`.
+
+## Observability
+
+- Errors go to: none by design. The site has no analytics, error tracking or runtime logging, and `verify-dist.mjs` rejects third-party scripts. Build and deploy logs live in GitHub Actions.
+- Read them with: `gh run list -R rubenspessoa/rubenspessoa.dev` and `gh run view <id> --log-failed`.
+
+## Linear
+
+- Project: none yet (team FRO). Branch `FRO-123-slug`, PR title `FRO-123: summary`, base `master`. Without a ticket use `chore/<slug>` and `chore: summary`.
