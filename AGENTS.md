@@ -76,8 +76,11 @@ Every push to `master` deploys to GitHub Pages. Agents work in a worktree on a `
 ## Observability
 
 - Errors go to: none by design. The site has no analytics, error tracking or runtime logging, and `verify-dist.mjs` rejects third-party scripts. Build and deploy logs live in GitHub Actions.
-- Read them with: `gh run list -R rubenspessoa/rubenspessoa.dev` and `gh run view <id> --log-failed`.
+- Read them with: `gh run list -R pixeldog-studio/rubenspessoa.dev` and `gh run view <id> --log-failed`.
 
-## Linear
+## Tickets
 
-- Project: none yet (team FRO). Strict gitflow: `feature/fro-123-slug` (or `bugfix/`) from `develop`; PR title `FRO-123: summary`; PR into `develop`; releases to `master` are human-only. Without a ticket use `feature/<slug>` and `chore: summary`.
+- GitHub issues in `pixeldog-studio/rubenspessoa.dev`, tracked on the org Project "Pixeldog Portfolio" with Product **Platform**. Cross-repo and design work lives in `pixeldog-studio/hq`. Conventions: hq's `pixeldog-github` skill.
+- Strict gitflow: `feature/gh-123-slug` (or `bugfix/`) from `develop`; PR title `#123: summary`; PR body `Closes #123`; PR into `develop`. Without an issue use `feature/<slug>`. Releases to `master` are human-only.
+- Agents may merge into `develop` after the quality gate passes and Nitpickr has reviewed the latest head (WORKFLOW.md §7).
+
