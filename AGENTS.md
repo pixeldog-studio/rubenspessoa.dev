@@ -82,4 +82,4 @@ Every push to `master` deploys to GitHub Pages. Agents work in a worktree on a `
 
 - GitHub issues in `pixeldog-studio/rubenspessoa.dev`, tracked on the org Project "Pixeldog Portfolio" with Product **Platform**. Cross-repo and design work lives in `pixeldog-studio/hq`. Conventions: hq's `pixeldog-github` skill.
 - Strict gitflow: `feature/gh-123-slug` (or `bugfix/`) from `develop`; PR title `#123: summary`; PR body `Closes #123`; PR into `develop`. Without an issue use `feature/<slug>` and PR title `chore: summary`. Releases to `master` are human-only.
-- Merges into `develop` follow WORKFLOW.md §7: only the hub merges, after the quality gate passes and Nitpickr has reviewed the latest head with no open threads; subagents and lanes stop at MERGE-READY. Never into `main`.
+- Merges into `develop` follow WORKFLOW.md §7: only the hub merges, after the quality gate passes and Nitpickr has reviewed the latest head with no open threads; subagents and lanes stop at MERGE-READY. Never into `master`.
