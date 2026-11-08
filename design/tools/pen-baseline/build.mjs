@@ -790,8 +790,8 @@ for (const ex of extracts) {
     height: L.height,
     clip: true,
     layout: "none",
-    // No page background in CSS: the browser paints its default white canvas.
-    fill: bg ? colorVar(bg, DARK ? ex.schemes.dark.bodyBg || ex.schemes.dark.htmlBg : bg) : colorVar("#FFFFFF", "#FFFFFF"),
+    // No page background in CSS: the browser paints its Canvas colour (white, or dark under color-scheme: dark).
+    fill: bg ? colorVar(bg, DARK ? ex.schemes.dark.bodyBg || ex.schemes.dark.htmlBg : bg) : colorVar(L.canvas || "#FFFFFF", DARK ? ex.schemes.dark.canvas || "#FFFFFF" : L.canvas || "#FFFFFF"),
     children: body.children ? [{ ...body, name: "body" }] : [],
   };
   // Shared chrome: identical header/footer subtrees become components.
