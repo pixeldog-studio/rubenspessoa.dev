@@ -88,6 +88,9 @@ for (const [key, capture] of manifest) {
   const ex = web
     ? exported.filter((e) => e.name === key)
     : exported.filter((e) => e.name.split('/').slice(2, 4).join('/') === key);
+  // A manifest row whose frame wasn't exported is a failure, not a skipped comparison.
+  if (!ex.length)
+    diffs.push({ frame: key, capture, error: 'no exported frame for this manifest row' });
   for (const e of ex) {
     const shot = join(repo, 'design', capture);
     if (!existsSync(shot)) {
@@ -161,13 +164,14 @@ const tally = (group, key, v, path, reason) => {
 };
 const walk = (n, path, reason) => {
   const p = `${path}/${n.name || n.id}`;
+  // Only a node's own metadata explains its own values; children are judged on theirs.
   const why = n.metadata?.reason ? `${n.metadata.type}: ${n.metadata.reason}` : reason;
   for (const [k, g] of Object.entries({ ...KEYS, ...EXTRA })) if (k in n) tally(g, k, n[k], p, why);
   if (n.type === 'ref' && n.descendants)
     for (const [did, o] of Object.entries(n.descendants))
       for (const [k, g] of Object.entries({ ...KEYS, ...EXTRA }))
         if (k in o) tally(g, k, o[k], `${p}>${did}`, why);
-  for (const c of n.children || []) walk(c, p, why);
+  for (const c of n.children || []) walk(c, p, null);
 };
 for (const c of doc.children) walk(c, '', null);
 console.log('\nproperty | bound | hard-coded | bound %');
@@ -205,4 +209,10 @@ if (args.json)
     JSON.stringify({ frames: exported, diffs, count, hard, issues }, null, 2),
   );
 rmSync(tmp, { recursive: true, force: true });
-process.exit(missing || unexplained.length || diffs.some((d) => d.ratio == null) ? 1 : 0);
+process.exit(
+  missing ||
+    unexplained.length ||
+    diffs.some((d) => d.ratio == null || (d.code !== undefined && d.code !== 0))
+    ? 1
+    : 0,
+);
