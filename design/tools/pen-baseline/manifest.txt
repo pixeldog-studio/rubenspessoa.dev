@@ -1,0 +1,15 @@
+# rubenspessoa.dev as-built captures (pixeldog-studio/rubenspessoa.dev#29). `pnpm build` from origin/develop
+# 536a09f, served from dist/ (`python3 -m http.server 4402 --bind 127.0.0.1`). Light and dark (light-dark() +
+# prefers-color-scheme). English routes only: /de/ and /pt-br/ home and about are the same layouts with
+# translated copy (src/i18n/ui.ts).
+# <screen> <path>
+home       /
+about      /about/
+imprint    /imprint/
+privacy    /privacy/
+terms      /terms/
+not-found  /404.html
+# States (row options: see capture.mjs). Widths: desktop 1440 (>640 layout), mobile 390 (351–640), narrow 320
+# (≤350). The footer theme switch's forced light/dark positions are not separate frames: forcing a theme
+# overrides prefers-color-scheme, and they look like the light and dark frames with one segment pressed.
+home-lang-menu-open  /  only=desktop,mobile  open=details#lang-menu

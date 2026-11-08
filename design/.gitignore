@@ -1,0 +1,4 @@
+# Browser captures, extracts and per-run working files: local only.
+.refs/
+# Apple fonts (license: not redistributable). Run fonts/install-sf.sh.
+fonts/SF-*
