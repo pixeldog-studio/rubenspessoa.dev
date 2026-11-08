@@ -9,3 +9,7 @@ imprint    /imprint/
 privacy    /privacy/
 terms      /terms/
 not-found  /404.html
+# States (row options: see capture.mjs). Widths: desktop 1440 (>640 layout), mobile 390 (351–640), narrow 320
+# (≤350). The footer theme switch's forced light/dark positions are not separate frames: forcing a theme
+# overrides prefers-color-scheme, and they look like the light and dark frames with one segment pressed.
+home-lang-menu-open  /  only=desktop,mobile  open=details#lang-menu

@@ -18,6 +18,11 @@
       "name": "mobile",
       "width": 390,
       "height": 844
+    },
+    {
+      "name": "narrow",
+      "width": 320,
+      "height": 640
     }
   ],
   "locale": "en-US",
