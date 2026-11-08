@@ -10,19 +10,25 @@
 //  - Header and footer subtrees that repeat across pages become components (instances on every other page).
 // Pen ignores $variables on width/height (pen 0.3.14), so sizes are literal measured numbers.
 // Usage: node design/tools/pen-baseline/build.mjs
-import { existsSync, readdirSync, readFileSync, unlinkSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  unlinkSync,
+  writeFileSync,
+} from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { penVariables } from "./tokens.mjs";
 import {
   codeVars,
   colorName,
-  penFamily,
-  setFontMap,
   indexTree,
   loadExtracts,
   numberName,
+  penFamily,
   r2,
+  setFontMap,
 } from "./usage.mjs";
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -35,7 +41,8 @@ setFontMap(cfg.fontMap);
 const extracts = loadExtracts(design);
 const cvars = codeVars(extracts, cfg.schemes);
 const tw = cvars.find((v) => v.name === "--spacing" && v.px)?.px || null;
-const DARK = cfg.schemes.includes("dark");
+// Dark instances only when both schemes were captured (a dark-only site captures "dark" as its one scheme).
+const DARK = cfg.schemes.length > 1 && cfg.schemes.includes("dark");
 const misses = new Map();
 const miss = (what) => misses.set(what, (misses.get(what) || 0) + 1);
 const unbound = { colors: {}, numbers: {} };
@@ -87,7 +94,10 @@ const weightVar = (w) => {
 };
 const familyVar = (ff, size) => {
   const f = penFamily(ff, size);
-  const n = `font-${f.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`;
+  const n = `font-${f
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")}`;
   if (has(n)) return `$${n}`;
   miss(`font ${f}`);
   return f;
@@ -173,7 +183,8 @@ function fillsOf(n, d) {
 }
 // rgb()/rgba() inside gradients -> hex (computed styles are always rgb/rgba or color())
 function cssColor(c) {
-  if (/^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/.test(c || "")) return c.toUpperCase();
+  if (/^#[0-9A-Fa-f]{6}([0-9A-Fa-f]{2})?$/.test(c || ""))
+    return c.toUpperCase();
   const m = /rgba?\(([\d.]+),\s*([\d.]+),\s*([\d.]+)(?:,\s*([\d.]+))?\)/.exec(
     c,
   );
@@ -309,7 +320,12 @@ function textNodes(run, el, d, origin, paragraph) {
   }
   // Mixed inline content: one positioned text per line, with the words the browser put on that line
   // (extract.js measures each word).
-  const tt = (x) => (s.textTransform === "uppercase" ? x.toUpperCase() : s.textTransform === "lowercase" ? x.toLowerCase() : x);
+  const tt = (x) =>
+    s.textTransform === "uppercase"
+      ? x.toUpperCase()
+      : s.textTransform === "lowercase"
+        ? x.toLowerCase()
+        : x;
   const out = [];
   for (const q of lines) {
     const chunk = tt(q.text || "").trim();
@@ -1011,13 +1027,19 @@ for (const [, list] of byScreen) {
 
 // Fonts Pen loads from design/fonts: config "fonts", plus one variable-weight entry per opsz instance.
 const opszFonts = Object.values(cfg.fontMap || {})
-  .filter((m) => m && m.opsz)
+  .filter((m) => m?.opsz)
   .flatMap((m) =>
     m.opsz.map((o) => ({
       name: `${m.prefix}${o}`,
       url: `fonts/${m.file.replace("{opsz}", o)}`,
       weight: m.wght || [100, 900],
-      axes: [{ tag: "wght", start: (m.wght || [100, 900])[0], end: (m.wght || [100, 900])[1] }],
+      axes: [
+        {
+          tag: "wght",
+          start: (m.wght || [100, 900])[0],
+          end: (m.wght || [100, 900])[1],
+        },
+      ],
     })),
   );
 const allFonts = [...(cfg.fonts || []), ...opszFonts];
@@ -1048,7 +1070,8 @@ if (existsSync(imgDir)) {
     }
   }
 }
-if (pruned) console.log(`pruned ${pruned} unreferenced image(s) from design/images`);
+if (pruned)
+  console.log(`pruned ${pruned} unreferenced image(s) from design/images`);
 // Accumulates across runs so the next tokens-draft keeps them (delete .refs/unbound.json to start over).
 const ubFile = join(design, ".refs", "unbound.json");
 const prev = existsSync(ubFile)

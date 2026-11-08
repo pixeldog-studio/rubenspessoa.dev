@@ -21,7 +21,9 @@ const { chromium } = await import(
   process.env.PLAYWRIGHT_MODULE || "playwright"
 );
 // extract.js is one arrow-function expression; a formatter may add a trailing semicolon.
-const extractSrc = readFileSync(join(here, "extract.js"), "utf8").trim().replace(/;$/, "");
+const extractSrc = readFileSync(join(here, "extract.js"), "utf8")
+  .trim()
+  .replace(/;$/, "");
 const cfg = JSON.parse(readFileSync(join(here, "config.json"), "utf8"));
 // manifest rows: <screen> <path> [note…]
 const rows = readFileSync(join(here, "manifest.txt"), "utf8")

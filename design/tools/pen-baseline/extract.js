@@ -89,7 +89,10 @@
     ].map((v) => px(v.split(" ")[0])),
     bg: norm(cs.backgroundColor),
     // colours inside gradients normalised to sRGB hex like every other colour
-    bgImage: cs.backgroundImage.replace(/(rgba?|color|oklch|oklab|lab|lch|hsla?)\([^()]*\)/g, (c) => norm(c) || "#00000000"),
+    bgImage: cs.backgroundImage.replace(
+      /(rgba?|color|oklch|oklab|lab|lch|hsla?)\([^()]*\)/g,
+      (c) => norm(c) || "#00000000",
+    ),
     bgSize: cs.backgroundSize,
     bgPosition: cs.backgroundPosition,
     shadow: cs.boxShadow,
@@ -126,8 +129,13 @@
     return transform(pre ? raw : raw.replace(/\s+/g, " "), cs.textTransform);
   };
   const lineRects = (node) => {
+    // Measure the visible characters only: leading/trailing whitespace would shift the box left or widen it.
     const r = document.createRange();
-    r.selectNodeContents(node);
+    const txt = node.textContent;
+    const lead = txt.length - txt.trimStart().length;
+    const trail = txt.length - txt.trimEnd().length;
+    r.setStart(node, lead);
+    r.setEnd(node, Math.max(lead, txt.length - trail));
     const rects = [...r.getClientRects()]
       .filter((q) => q.width > 0.5 && q.height > 0.5)
       .map(rectOf);
@@ -155,7 +163,11 @@
         if (!q) continue;
         const y = q.top + scrollY;
         let i = lines.findIndex((m) => Math.abs(m.y - y) < 2);
-        if (i < 0) i = lines.reduce((b, m, k) => (Math.abs(m.y - y) < Math.abs(lines[b].y - y) ? k : b), 0);
+        if (i < 0)
+          i = lines.reduce(
+            (b, m, k) => (Math.abs(m.y - y) < Math.abs(lines[b].y - y) ? k : b),
+            0,
+          );
         byLine[i].push({ s: w[0], x: q.left + scrollX, r: q.right + scrollX });
       }
       lines.forEach((l, i) => {
@@ -177,33 +189,100 @@
     const det = m.a * m.d - m.b * m.c;
     const sc = Math.sqrt(Math.abs(det));
     const rot = (Math.atan2(m.b, m.a) * 180) / Math.PI;
-    let i = 0, cmd = "", x = 0, y = 0, sx = 0, sy = 0, px2 = 0, py2 = 0;
+    let i = 0,
+      cmd = "",
+      x = 0,
+      y = 0,
+      sx = 0,
+      sy = 0,
+      px2 = 0,
+      py2 = 0;
     const out = [];
     const num = () => parseFloat(toks[i++]);
-    const pt = (rel) => { const a = num(), b = num(); return rel ? [x + a, y + b] : [a, b]; };
+    const pt = (rel) => {
+      const a = num(),
+        b = num();
+      return rel ? [x + a, y + b] : [a, b];
+    };
     while (i < toks.length) {
       if (/[a-zA-Z]/.test(toks[i])) cmd = toks[i++];
       const rel = cmd === cmd.toLowerCase();
       const C = cmd.toUpperCase();
-      if (C === "Z") { out.push("Z"); x = sx; y = sy; if (i < toks.length && !/[a-zA-Z]/.test(toks[i])) cmd = "L"; continue; }
-      if (C === "M" || C === "L" || C === "T") { const [nx, ny] = pt(rel); const q = P(nx, ny); out.push(`${C === "M" ? "M" : "L"} ${f(q[0])} ${f(q[1])}`); if (C === "M") { sx = nx; sy = ny; cmd = rel ? "l" : "L"; } x = nx; y = ny; px2 = x; py2 = y; continue; }
-      if (C === "H") { const v = num(); x = rel ? x + v : v; const q = P(x, y); out.push(`L ${f(q[0])} ${f(q[1])}`); continue; }
-      if (C === "V") { const v = num(); y = rel ? y + v : v; const q = P(x, y); out.push(`L ${f(q[0])} ${f(q[1])}`); continue; }
-      if (C === "C" || C === "S") {
-        let c1;
-        if (C === "C") c1 = pt(rel); else c1 = [2 * x - px2, 2 * y - py2];
-        const c2 = pt(rel), e2 = pt(rel);
-        const [a, b, c] = [P(...c1), P(...c2), P(...e2)];
-        out.push(`C ${f(a[0])} ${f(a[1])} ${f(b[0])} ${f(b[1])} ${f(c[0])} ${f(c[1])}`);
-        px2 = c2[0]; py2 = c2[1]; x = e2[0]; y = e2[1]; continue;
+      if (C === "Z") {
+        out.push("Z");
+        x = sx;
+        y = sy;
+        if (i < toks.length && !/[a-zA-Z]/.test(toks[i])) cmd = "L";
+        continue;
       }
-      if (C === "Q") { const c1 = pt(rel), e2 = pt(rel); const [a, b] = [P(...c1), P(...e2)]; out.push(`Q ${f(a[0])} ${f(a[1])} ${f(b[0])} ${f(b[1])}`); x = e2[0]; y = e2[1]; continue; }
-      if (C === "A") {
-        const rx = num(), ry = num(), xr = num(), large = num(), sweep = num();
+      if (C === "M" || C === "L" || C === "T") {
         const [nx, ny] = pt(rel);
         const q = P(nx, ny);
-        out.push(`A ${f(rx * sc)} ${f(ry * sc)} ${f(xr + rot)} ${large} ${det < 0 ? 1 - sweep : sweep} ${f(q[0])} ${f(q[1])}`);
-        x = nx; y = ny; continue;
+        out.push(`${C === "M" ? "M" : "L"} ${f(q[0])} ${f(q[1])}`);
+        if (C === "M") {
+          sx = nx;
+          sy = ny;
+          cmd = rel ? "l" : "L";
+        }
+        x = nx;
+        y = ny;
+        px2 = x;
+        py2 = y;
+        continue;
+      }
+      if (C === "H") {
+        const v = num();
+        x = rel ? x + v : v;
+        const q = P(x, y);
+        out.push(`L ${f(q[0])} ${f(q[1])}`);
+        continue;
+      }
+      if (C === "V") {
+        const v = num();
+        y = rel ? y + v : v;
+        const q = P(x, y);
+        out.push(`L ${f(q[0])} ${f(q[1])}`);
+        continue;
+      }
+      if (C === "C" || C === "S") {
+        let c1;
+        if (C === "C") c1 = pt(rel);
+        else c1 = [2 * x - px2, 2 * y - py2];
+        const c2 = pt(rel),
+          e2 = pt(rel);
+        const [a, b, c] = [P(...c1), P(...c2), P(...e2)];
+        out.push(
+          `C ${f(a[0])} ${f(a[1])} ${f(b[0])} ${f(b[1])} ${f(c[0])} ${f(c[1])}`,
+        );
+        px2 = c2[0];
+        py2 = c2[1];
+        x = e2[0];
+        y = e2[1];
+        continue;
+      }
+      if (C === "Q") {
+        const c1 = pt(rel),
+          e2 = pt(rel);
+        const [a, b] = [P(...c1), P(...e2)];
+        out.push(`Q ${f(a[0])} ${f(a[1])} ${f(b[0])} ${f(b[1])}`);
+        x = e2[0];
+        y = e2[1];
+        continue;
+      }
+      if (C === "A") {
+        const rx = num(),
+          ry = num(),
+          xr = num(),
+          large = num(),
+          sweep = num();
+        const [nx, ny] = pt(rel);
+        const q = P(nx, ny);
+        out.push(
+          `A ${f(rx * sc)} ${f(ry * sc)} ${f(xr + rot)} ${large} ${det < 0 ? 1 - sweep : sweep} ${f(q[0])} ${f(q[1])}`,
+        );
+        x = nx;
+        y = ny;
+        continue;
       }
       i++; // unknown token: skip
     }
@@ -213,33 +292,78 @@
     const out = [];
     // <use href="#symbol"> sprites: draw the symbol's shapes with the <use>'s inherited paint.
     const SHAPES = "path,circle,ellipse,rect,line,polyline,polygon";
-    const items = [...svg.querySelectorAll(SHAPES)].map((s) => ({ s, ctx: null }));
+    const items = [...svg.querySelectorAll(SHAPES)].map((s) => ({
+      s,
+      ctx: null,
+    }));
     let symVb = null;
     let unresolved = false;
     for (const u of svg.querySelectorAll("use")) {
       const href = u.getAttribute("href") || u.getAttribute("xlink:href") || "";
-      const target = href.startsWith("#") ? document.getElementById(href.slice(1)) : null;
-      if (!target) { unresolved = true; continue; }
-      if (target.viewBox?.baseVal?.width) symVb = [target.viewBox.baseVal.x, target.viewBox.baseVal.y, target.viewBox.baseVal.width, target.viewBox.baseVal.height];
-      for (const s of target.matches(SHAPES) ? [target] : target.querySelectorAll(SHAPES)) items.push({ s, ctx: getComputedStyle(u) });
+      const target = href.startsWith("#")
+        ? document.getElementById(href.slice(1))
+        : null;
+      if (!target) {
+        unresolved = true;
+        continue;
+      }
+      if (target.viewBox?.baseVal?.width)
+        symVb = [
+          target.viewBox.baseVal.x,
+          target.viewBox.baseVal.y,
+          target.viewBox.baseVal.width,
+          target.viewBox.baseVal.height,
+        ];
+      for (const s of target.matches(SHAPES)
+        ? [target]
+        : target.querySelectorAll(SHAPES))
+        items.push({ s, ctx: getComputedStyle(u) });
     }
-    const vb = !svg.viewBox?.baseVal?.width && symVb ? symVb : svg.viewBox?.baseVal?.width
-      ? [
-          svg.viewBox.baseVal.x,
-          svg.viewBox.baseVal.y,
-          svg.viewBox.baseVal.width,
-          svg.viewBox.baseVal.height,
-        ]
-      : null;
-    let complex = !!svg.querySelector(
-      "text,image,mask,pattern,foreignObject,filter,clipPath,linearGradient,radialGradient",
-    ) || unresolved;
+    const vb =
+      !svg.viewBox?.baseVal?.width && symVb
+        ? symVb
+        : svg.viewBox?.baseVal?.width
+          ? [
+              svg.viewBox.baseVal.x,
+              svg.viewBox.baseVal.y,
+              svg.viewBox.baseVal.width,
+              svg.viewBox.baseVal.height,
+            ]
+          : null;
+    const complex =
+      !!svg.querySelector(
+        "text,image,mask,pattern,foreignObject,filter,clipPath,linearGradient,radialGradient",
+      ) || unresolved;
     for (const { s, ctx } of items) {
       const own = getComputedStyle(s);
       // Inside a sprite symbol, paint that isn't set on the shape comes from the <use>.
-      const attr = (n) => { for (let p = s; p && p.tagName && p.tagName.toLowerCase() !== "svg"; p = p.parentElement) { const v = p.getAttribute(n); if (v) return v; } return null; };
-      const pick = (n, prop) => (ctx && (!attr(n) || attr(n) === "currentColor") ? ctx[prop] : own[prop]);
-      const cs = ctx ? { display: own.display, fill: pick("fill", "fill"), stroke: pick("stroke", "stroke"), strokeWidth: attr("stroke-width") || ctx.strokeWidth, fillRule: own.fillRule, fillOpacity: own.fillOpacity, strokeOpacity: own.strokeOpacity, strokeLinecap: attr("stroke-linecap") || ctx.strokeLinecap, strokeLinejoin: attr("stroke-linejoin") || ctx.strokeLinejoin, opacity: own.opacity } : own;
+      const attr = (n) => {
+        for (
+          let p = s;
+          p?.tagName && p.tagName.toLowerCase() !== "svg";
+          p = p.parentElement
+        ) {
+          const v = p.getAttribute(n);
+          if (v) return v;
+        }
+        return null;
+      };
+      const pick = (n, prop) =>
+        ctx && (!attr(n) || attr(n) === "currentColor") ? ctx[prop] : own[prop];
+      const cs = ctx
+        ? {
+            display: own.display,
+            fill: pick("fill", "fill"),
+            stroke: pick("stroke", "stroke"),
+            strokeWidth: attr("stroke-width") || ctx.strokeWidth,
+            fillRule: own.fillRule,
+            fillOpacity: own.fillOpacity,
+            strokeOpacity: own.strokeOpacity,
+            strokeLinecap: attr("stroke-linecap") || ctx.strokeLinecap,
+            strokeLinejoin: attr("stroke-linejoin") || ctx.strokeLinejoin,
+            opacity: own.opacity,
+          }
+        : own;
       if (cs.display === "none") continue;
       let d = "";
       const a = (n) => parseFloat(s.getAttribute(n) || 0);
@@ -292,9 +416,23 @@
       }
       // Transforms between the shape and its <svg>/<symbol>: baked into the path.
       let mtx = new DOMMatrix();
-      for (let p = s; p && p.tagName && !["svg", "symbol"].includes(p.tagName.toLowerCase()); p = p.parentElement) {
+      for (
+        let p = s;
+        p?.tagName && !["svg", "symbol"].includes(p.tagName.toLowerCase());
+        p = p.parentElement
+      ) {
         const t = p.transform?.baseVal?.consolidate?.();
-        if (t) mtx = t.matrix.multiply ? new DOMMatrix([t.matrix.a, t.matrix.b, t.matrix.c, t.matrix.d, t.matrix.e, t.matrix.f]).multiply(mtx) : mtx;
+        if (t)
+          mtx = t.matrix.multiply
+            ? new DOMMatrix([
+                t.matrix.a,
+                t.matrix.b,
+                t.matrix.c,
+                t.matrix.d,
+                t.matrix.e,
+                t.matrix.f,
+              ]).multiply(mtx)
+            : mtx;
       }
       if (!mtx.isIdentity && d) d = transformPath(d, mtx);
       out.push({
@@ -316,7 +454,14 @@
     const cs = getComputedStyle(el);
     if (!vis(cs)) return null;
     // closed <details>, content-visibility:hidden and similar: rendered nowhere
-    if (el.checkVisibility && !el.checkVisibility({ contentVisibilityAuto: true, visibilityProperty: true })) return null;
+    if (
+      el.checkVisibility &&
+      !el.checkVisibility({
+        contentVisibilityAuto: true,
+        visibilityProperty: true,
+      })
+    )
+      return null;
     const tag = el.tagName.toLowerCase();
     if (
       [
@@ -331,6 +476,15 @@
     )
       return null;
     const r = el.getBoundingClientRect();
+    // Visually hidden (sr-only) text: a 1 px clipped box that screen readers read and nobody sees.
+    if (
+      r.width <= 1 &&
+      r.height <= 1 &&
+      (cs.overflow !== "visible" ||
+        cs.clip !== "auto" ||
+        cs.clipPath !== "none")
+    )
+      return null;
     const node = {
       id: `e${++seq}`,
       tag,

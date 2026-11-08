@@ -6,7 +6,7 @@ colorSpace: srgb # computed sRGB values of the CSS the pages render (display-p3 
 # code's CSS custom properties. `literal-*` colours and value-named numbers have no custom property: open questions.
 colors:
   ink-muted: { light: "#545B63", dark: "#8C8C89" }  # 338 use(s)
-  ink: { light: "#011627", dark: "#ECECEA" }  # 182 use(s)
+  ink: { light: "#011627", dark: "#ECECEA" }  # 158 use(s)
   ink-soft: { light: "#39434D", dark: "#B6B6B3" }  # 142 use(s)
   line-soft: { light: "#01162714", dark: "#ECECEA17" }  # 80 use(s)
   bg: { light: "#FBFAF7", dark: "#0F0F0E" }  # 24 use(s)
