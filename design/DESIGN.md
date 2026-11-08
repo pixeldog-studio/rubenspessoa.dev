@@ -144,13 +144,14 @@ hand-edit a value. Code wins ties: `src/styles/site.css` is the whole stylesheet
 
 - The paper grain: a fixed `body::before` noise overlay (an SVG turbulence data URL at `--grain-opacity`). Pen
   can't tile it, and it accounts for most of the pixel diff on the first viewport of every page.
-- Hover/focus states (accent colour), the open language menu and the open mobile states.
+- Hover/focus states (the accent colour) and the theme switch's forced light/dark positions: forcing a theme
+  overrides `prefers-color-scheme`, and those states look like the light and dark frames with one segment pressed.
 - `/de/` and `/pt-br/`: the same layouts as `/` and `/about/` with translated copy.
 
 ## Open questions
 
 - 3 `literal-*` colours have no custom property: plain black (#000000), the verdigris page-wash gradient stop (#0EB8B8 at 7%) and transparent.
-- 26 spacing values and 14 font sizes come from `rem`/`clamp()` at the two captured widths. Is a fixed scale wanted?
+- 32 spacing values and 14 font sizes come from `rem`/`clamp()` at the three captured widths (1440, 390, 320). Is a fixed scale wanted?
 - `hq design tokens-check rubenspessoa.dev` can't read plain `light-dark()` custom properties yet
   (pixeldog-studio/hq#156).
 
