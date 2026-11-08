@@ -1,54 +1,48 @@
 #!/usr/bin/env node
-import { createHash } from "node:crypto";
+/* global console, process, Buffer, URL, setTimeout, document, window */
+import { createHash } from 'node:crypto';
 // Captures every route in manifest.txt from a local server running this worktree's build:
 //   design/.refs/captures/<screen>__<viewport>__<scheme>.png   full-page screenshot (DPR 1)
 //   design/.refs/extract/<screen>__<viewport>.json            rendered tree, light + dark (same DOM, paired by id)
 //   design/images/<sha1>.<ext>                                 every image the pages render (committed: the .pen uses them)
 // Usage: node design/tools/pen-baseline/capture.mjs --base http://127.0.0.1:4321 [--only home]
 // Needs Playwright: PLAYWRIGHT_MODULE=/path/to/node_modules/playwright/index.mjs (any 1.5x; not a repo dependency).
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const args = {};
 for (let i = 2; i < process.argv.length; i++) {
-  if (process.argv[i].startsWith("--"))
-    args[process.argv[i].slice(2)] = process.argv[i + 1];
+  if (process.argv[i].startsWith('--')) args[process.argv[i].slice(2)] = process.argv[i + 1];
 }
 const here = dirname(fileURLToPath(import.meta.url));
-const design = resolve(here, "..", "..");
-const { chromium } = await import(
-  process.env.PLAYWRIGHT_MODULE || "playwright"
-);
+const design = resolve(here, '..', '..');
+const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
 // extract.js is one arrow-function expression; a formatter may add a trailing semicolon.
-const extractSrc = readFileSync(join(here, "extract.js"), "utf8")
-  .trim()
-  .replace(/;$/, "");
-const cfg = JSON.parse(readFileSync(join(here, "config.json"), "utf8"));
+// extract.js defines globalThis.__penExtract inside the page.
+const extractSrc = readFileSync(join(here, 'extract.js'), 'utf8');
+const cfg = JSON.parse(readFileSync(join(here, 'config.json'), 'utf8'));
 // manifest rows: <screen> <path> [note…]
-const rows = readFileSync(join(here, "manifest.txt"), "utf8")
-  .split("\n")
-  .filter((l) => l.trim() && !l.startsWith("#"))
+const rows = readFileSync(join(here, 'manifest.txt'), 'utf8')
+  .split('\n')
+  .filter((l) => l.trim() && !l.startsWith('#'))
   .map((l) => l.trim().split(/\s+/));
 const base = args.base || cfg.base;
-for (const d of ["captures", "extract"])
-  mkdirSync(join(design, ".refs", d), { recursive: true });
-mkdirSync(join(design, "images"), { recursive: true });
+for (const d of ['captures', 'extract']) mkdirSync(join(design, '.refs', d), { recursive: true });
+mkdirSync(join(design, 'images'), { recursive: true });
 
 const FREEZE = `*,*::before,*::after{animation:none!important;transition:none!important;caret-color:transparent!important;scroll-behavior:auto!important}`;
 const browser = await chromium.launch();
 const saved = new Map();
 const saveAsset = async (page, url) => {
-  if (!url || (url.startsWith("data:") && url.length > 2_000_000)) return null;
+  if (!url || (url.startsWith('data:') && url.length > 2_000_000)) return null;
   if (saved.has(url)) return saved.get(url);
   let buf, type;
-  if (url.startsWith("data:")) {
+  if (url.startsWith('data:')) {
     const m = /^data:([^;,]+)(;base64)?,(.*)$/s.exec(url);
     if (!m) return null;
     type = m[1];
-    buf = m[2]
-      ? Buffer.from(m[3], "base64")
-      : Buffer.from(decodeURIComponent(m[3]));
+    buf = m[2] ? Buffer.from(m[3], 'base64') : Buffer.from(decodeURIComponent(m[3]));
   } else {
     const r = await page.request.get(url).catch(() => null);
     if (!r?.ok()) {
@@ -56,33 +50,31 @@ const saveAsset = async (page, url) => {
       return null;
     }
     buf = await r.body();
-    type = (r.headers()["content-type"] || "").split(";")[0];
+    type = (r.headers()['content-type'] || '').split(';')[0];
   }
   const ext =
     {
-      "image/png": "png",
-      "image/jpeg": "jpg",
-      "image/webp": "webp",
-      "image/svg+xml": "svg",
-      "image/gif": "gif",
-      "image/avif": "avif",
-    }[type] || (url.split("?")[0].split(".").pop() || "bin").slice(0, 4);
-  const name = `${createHash("sha1").update(buf).digest("hex").slice(0, 16)}.${ext}`;
-  const file = join(design, "images", name);
+      'image/png': 'png',
+      'image/jpeg': 'jpg',
+      'image/webp': 'webp',
+      'image/svg+xml': 'svg',
+      'image/gif': 'gif',
+      'image/avif': 'avif',
+    }[type] || (url.split('?')[0].split('.').pop() || 'bin').slice(0, 4);
+  const name = `${createHash('sha1').update(buf).digest('hex').slice(0, 16)}.${ext}`;
+  const file = join(design, 'images', name);
   if (!existsSync(file)) writeFileSync(file, buf);
   saved.set(url, `images/${name}`);
   return `images/${name}`;
 };
 const urlsIn = (bgImage) =>
-  [...(bgImage || "").matchAll(/url\(["']?([^"')]+)["']?\)/g)].map((m) => m[1]);
+  [...(bgImage || '').matchAll(/url\(["']?([^"')]+)["']?\)/g)].map((m) => m[1]);
 const assets = async (page, node, ctx, out) => {
   if (!node || node.text !== undefined) return;
   if (node.img) node.asset = await saveAsset(page, node.img);
   const bgs = urlsIn(node.s?.bgImage);
   if (bgs.length)
-    node.bgAssets = await Promise.all(
-      bgs.map((u) => saveAsset(page, new URL(u, page.url()).href)),
-    );
+    node.bgAssets = await Promise.all(bgs.map((u) => saveAsset(page, new URL(u, page.url()).href)));
   // Things Pen can't draw as vectors: complex SVG, canvas, iframes, AVIF/unsupported images -> raster of the element.
   const raster =
     node.raster ||
@@ -93,13 +85,13 @@ const assets = async (page, node, ctx, out) => {
     const buf = await el
       .screenshot({
         omitBackground: true,
-        animations: "disabled",
+        animations: 'disabled',
         timeout: 10000,
       })
       .catch(() => null);
     if (buf) {
-      const name = `${createHash("sha1").update(buf).digest("hex").slice(0, 16)}.png`;
-      writeFileSync(join(design, "images", name), buf);
+      const name = `${createHash('sha1').update(buf).digest('hex').slice(0, 16)}.png`;
+      writeFileSync(join(design, 'images', name), buf);
       node.rasterAsset = `images/${name}`;
       out.rasters++;
     }
@@ -107,7 +99,7 @@ const assets = async (page, node, ctx, out) => {
   for (const k of node.kids || []) await assets(page, k, ctx, out);
 };
 
-const only = args.only ? new Set(args.only.split(",")) : null;
+const only = args.only ? new Set(args.only.split(',')) : null;
 // Row options after the path, whitespace-separated key=value (%20 for a space in a value):
 //   only=mobile,tablet      viewports this state exists at (e.g. a hamburger menu)
 //   status=404              expected HTTP status instead of 2xx
@@ -115,40 +107,40 @@ const only = args.only ? new Set(args.only.split(",")) : null;
 //   click=<selector>  fill=<selector>|<text>  open=<details selector>  press=<key>  wait=<ms>   steps, in order
 const opts = (tokens) =>
   tokens.map((t) => {
-    const i = t.indexOf("=");
+    const i = t.indexOf('=');
     return [t.slice(0, i), decodeURIComponent(t.slice(i + 1))];
   });
 for (const [screen, path, ...rest] of rows) {
   if (only && !only.has(screen)) continue;
   const o = opts(rest);
-  const onlyVp = o.find(([k]) => k === "only")?.[1].split(",");
-  const wantStatus = Number(o.find(([k]) => k === "status")?.[1] || 0);
+  const onlyVp = o.find(([k]) => k === 'only')?.[1].split(',');
+  const wantStatus = Number(o.find(([k]) => k === 'status')?.[1] || 0);
   for (const vp of cfg.viewports) {
     if (onlyVp && !onlyVp.includes(vp.name)) continue;
     const ctx = await browser.newContext({
       viewport: { width: vp.width, height: vp.height },
       deviceScaleFactor: 1,
-      colorScheme: "light",
-      reducedMotion: "reduce",
-      locale: cfg.locale || "en-US",
+      colorScheme: 'light',
+      reducedMotion: 'reduce',
+      locale: cfg.locale || 'en-US',
     });
     const page = await ctx.newPage();
     for (const [k, v] of o) {
-      if (k !== "mock") continue;
-      const [glob, status, body] = v.split("|");
+      if (k !== 'mock') continue;
+      const [glob, status, body] = v.split('|');
       await page.route(glob, (route) =>
-        status === "hang"
+        status === 'hang'
           ? undefined
           : route.fulfill({
               status: Number(status),
-              contentType: "application/json",
-              body: body || "{}",
+              contentType: 'application/json',
+              body: body || '{}',
             }),
       );
     }
     const url = new URL(path, base).href;
     const res = await page.goto(url, {
-      waitUntil: "networkidle",
+      waitUntil: 'networkidle',
       timeout: 60000,
     });
     if (wantStatus ? res?.status() !== wantStatus : !res?.ok()) {
@@ -157,8 +149,7 @@ for (const [screen, path, ...rest] of rows) {
       continue;
     }
     await page.addStyleTag({ content: FREEZE });
-    for (const css of cfg.captureCss || [])
-      await page.addStyleTag({ content: css });
+    for (const css of cfg.captureCss || []) await page.addStyleTag({ content: css });
     // Walk the page once so lazy images and reveal-on-scroll content load, then return to the top.
     await page.evaluate(async () => {
       for (let y = 0; y < document.documentElement.scrollHeight; y += 600) {
@@ -168,67 +159,57 @@ for (const [screen, path, ...rest] of rows) {
       window.scrollTo(0, 0);
     });
     await page.evaluate(() => document.fonts.ready);
-    await page.waitForLoadState("networkidle").catch(() => {});
+    await page.waitForLoadState('networkidle').catch(() => {});
     await page.waitForTimeout(400);
     // State steps (menus, accordions, toggles, form outcomes), applied after the page settles.
     let stepError = null;
     try {
-    for (const [k, v] of o) {
-      if (k === "click")
-        await page.locator(v).first().click({ timeout: 10000 });
-      else if (k === "fill") {
-        const [sel, text] = v.split("|");
-        await page.locator(sel).first().fill(text);
-      } else if (k === "open")
-        await page.evaluate((sel) => {
-          for (const d of document.querySelectorAll(sel)) d.open = true;
-        }, v);
-      else if (k === "press") await page.keyboard.press(v);
-      else if (k === "wait") await page.waitForTimeout(Number(v));
-    }
+      for (const [k, v] of o) {
+        if (k === 'click') await page.locator(v).first().click({ timeout: 10000 });
+        else if (k === 'fill') {
+          const [sel, text] = v.split('|');
+          await page.locator(sel).first().fill(text);
+        } else if (k === 'open')
+          await page.evaluate((sel) => {
+            for (const d of document.querySelectorAll(sel)) d.open = true;
+          }, v);
+        else if (k === 'press') await page.keyboard.press(v);
+        else if (k === 'wait') await page.waitForTimeout(Number(v));
+      }
     } catch (err) {
-      stepError = err.message.split("\n")[0];
+      stepError = err.message.split('\n')[0];
     }
     if (stepError) {
       console.log(`FAIL ${screen} ${vp.name}: state step failed: ${stepError}`);
       await ctx.close();
       continue;
     }
-    if (o.some(([k]) => ["click", "fill", "press", "open"].includes(k)))
+    if (o.some(([k]) => ['click', 'fill', 'press', 'open'].includes(k)))
       await page.waitForTimeout(500);
     const out = { screen, path, viewport: vp, schemes: {}, rasters: 0 };
     for (const scheme of cfg.schemes) {
-      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: 'reduce' });
       await page.waitForTimeout(250);
-      const shot = join(
-        design,
-        ".refs",
-        "captures",
-        `${screen}__${vp.name}__${scheme}.png`,
-      );
+      const shot = join(design, '.refs', 'captures', `${screen}__${vp.name}__${scheme}.png`);
       await page.screenshot({
         path: shot,
         fullPage: true,
-        animations: "disabled",
+        animations: 'disabled',
       });
-      const data = await page.evaluate(
-        `(${extractSrc})(${JSON.stringify({})})`,
-      );
+      const data = await page.evaluate(`${extractSrc}\n;globalThis.__penExtract()`);
       out.schemes[scheme] = data;
     }
     await page.emulateMedia({
       colorScheme: cfg.schemes[0],
-      reducedMotion: "reduce",
+      reducedMotion: 'reduce',
     });
     await assets(page, out.schemes[cfg.schemes[0]].tree, ctx, out);
     writeFileSync(
-      join(design, ".refs", "extract", `${screen}__${vp.name}.json`),
+      join(design, '.refs', 'extract', `${screen}__${vp.name}.json`),
       JSON.stringify(out),
     );
     const d = out.schemes[cfg.schemes[0]];
-    console.log(
-      `ok ${screen} ${vp.name} ${d.width}x${d.height} rasters=${out.rasters}`,
-    );
+    console.log(`ok ${screen} ${vp.name} ${d.width}x${d.height} rasters=${out.rasters}`);
     await ctx.close();
   }
 }

@@ -4,10 +4,7 @@
   "sha": "536a09f",
   "file": "rubenspessoa-dev.pen",
   "base": "http://127.0.0.1:4402",
-  "schemes": [
-    "light",
-    "dark"
-  ],
+  "schemes": ["light", "dark"],
   "viewports": [
     {
       "name": "desktop",
@@ -28,23 +25,10 @@
   "locale": "en-US",
   "fontMap": {
     "-apple-system": {
-      "opsz": [
-        17,
-        18,
-        19,
-        21,
-        22,
-        30,
-        34,
-        40,
-        54
-      ],
+      "opsz": [17, 18, 19, 21, 22, 30, 34, 40, 54],
       "prefix": "SF Pro ",
       "file": "SF-Pro-opsz{opsz}.ttf",
-      "wght": [
-        1,
-        1000
-      ]
+      "wght": [1, 1000]
     }
   },
   "dsInk": "ink",
