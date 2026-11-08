@@ -1,0 +1,50 @@
+{
+  "id": "GH-29",
+  "name": "rubenspessoa.dev",
+  "sha": "536a09f",
+  "file": "rubenspessoa-dev.pen",
+  "base": "http://127.0.0.1:4402",
+  "schemes": [
+    "light",
+    "dark"
+  ],
+  "viewports": [
+    {
+      "name": "desktop",
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "name": "mobile",
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "locale": "en-US",
+  "fontMap": {
+    "-apple-system": {
+      "opsz": [
+        17,
+        18,
+        19,
+        21,
+        22,
+        30,
+        34,
+        40,
+        54
+      ],
+      "prefix": "SF Pro ",
+      "file": "SF-Pro-opsz{opsz}.ttf",
+      "wght": [
+        1,
+        1000
+      ]
+    }
+  },
+  "dsInk": "ink",
+  "dsMuted": "ink-muted",
+  "dsLine": "line",
+  "dsBg": "bg",
+  "dsFont": "font-sf-pro-17"
+}
