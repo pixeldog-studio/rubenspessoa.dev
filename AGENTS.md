@@ -71,7 +71,7 @@ No SVG rasteriser (rsvg, ImageMagick) is installed. To regenerate:
 
 ## Git
 
-Every push to `master` deploys to GitHub Pages. Agents work in a worktree on a `feature/` branch cut from `develop` and open a PR into `develop`; they may merge into `develop` after the quality gate and the Nitpickr review. Never push to `develop` or `master` directly; releasing `develop` to `master` is human-only. Use `gh` for remote state, since local clones can lag `origin`.
+Every push to `master` deploys to GitHub Pages. Agents work in a worktree on a `feature/` branch cut from `develop` and open a PR into `develop`; merges follow the rule in `## Tickets` below (hub only). Never push to `develop` or `master` directly; releasing `develop` to `master` is human-only. Use `gh` for remote state, since local clones can lag `origin`.
 
 ## Observability
 
